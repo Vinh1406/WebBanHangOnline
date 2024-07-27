@@ -20,6 +20,8 @@ namespace WebBanHangOnline.Models.EF
         public string Description { get; set; }
         public string Detail { get; set; }
         public string Image { get; set; }
+        public string Alias { get; set; }
+
         public decimal Price { get; set; }
         public decimal PriceSale { get; set; }
         public int Quantity { get; set; }
