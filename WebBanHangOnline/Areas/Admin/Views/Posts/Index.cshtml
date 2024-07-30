@@ -1,10 +1,9 @@
 ﻿
-@model PagedList.PagedList<WebBanHangOnline.Models.EF.News>
-@using PagedList.Mvc;
-@using PagedList;
+@model IEnumerable<WebBanHangOnline.Models.EF.Posts>
+
 
 @{
-    ViewBag.Title = "Tin tức";
+    ViewBag.Title = "Bài viết";
     Layout = "~/Areas/Admin/Views/Shared/_Layout.cshtml";
 }
 @section naviheader{
@@ -16,7 +15,7 @@
             <a href="/admin" class="nav-link">Home</a>
         </li>
         <li class="nav-item d-none d-sm-inline-block">
-            <a href="/admin/news" class="nav-link">@ViewBag.Title</a>
+            <a href="/admin/Posts" class="nav-link">@ViewBag.Title</a>
         </li>
     </ul>
 }
@@ -50,58 +49,48 @@
             <h3 class="card-title">Danh sách @ViewBag.Title</h3>
 
             <div class="card-tools">
-                <a href="/Admin/News/add" class="btn btn-primary">Thêm mới</a>
+                <a href="/Admin/Posts/add" class="btn btn-primary">Thêm mới</a>
                 <a href="#" class="btn btn-danger" id="btnDeleteAll"> Xóa</a>
             </div>
         </div>
         <div class="card-body">
-            <div class="row">
-                <div class="col-6">
-                    @using (Html.BeginForm("index", "news", FormMethod.Get, new { }))
-                    {
-                        <div class="input-group input-group-sm">
-                            @Html.TextBox("Searchtext", new {@class="form-control"})
-                            <span class="input-group-append">
-                                <button type="submit" class="btn btn-info btn-flat">Tìm Kiếm</button>
-                            </span>
-                        </div>
-                    }
-                </div>
-            </div>
             <table class="table table-hover">
                 <thead>
                     <tr class="text-center">
-                        <th><input type="checkbox" id="selectALL" /></th>
-                        <th>STT</th>
-                        <th>Hình ảnh</th>
-                        <th>Tiêu đề</th>
-                        <th>Ngày tạo</th>
-                        <th>Hiển thị</th>
-                        <th style="width:150px;"></th>
+                        <td><input type="checkbox" id="selectALL" /></td>
+                        <td>STT</td>
+                        <td>Hình ảnh</td>
+                        <td>Tiêu đề</td>
+                        <td>Ngày tạo</td>
+                        <td>Hiển thị</td>
+                        <td>Thứ tự</td>
+
+                        <th></th>
                     </tr>
                 </thead>
                 <tbody>
                     @if (Model != null && Model.Any())
                     {
-                        var i = ((ViewBag.Page - 1) * ViewBag.PageSize) + 1;
+                        var i = 1;
                         foreach (var item in Model)
                         {
                             var strCheck = item.IsActive ? "<i class='fa fa-check text-success'></i>" : "<i class='fas fa-times text-danger'></i>";
 
                             <tr id="trow_@item.Id" class="text-center">
-                                <th><input type="checkbox" class="cbkItem" value="@item.Id" /></th>
-                                <th>@i</th>
-                                <th><img src="@item.Image" width="80" height="80" /></th>
-                                <th style="width:300px;text-align:left;">@item.Title</th>
-                                <th>@item.CreateDate.ToString("dd//MM//yyyy")</th>
-                                <th>
+                                <td><input type="checkbox" class="cbkItem" value="@item.Id" /></td>
+                                <td>@i</td>
+                                <td><img src="@item.Image" width="80" height="80" /></td>
+                                <td>@item.Title</td>
+                                <td>@item.CreateDate.ToString("dd//MM//yyyy")</td>
+                                <td>
                                     <a href='#' data-id="@item.Id" class="btnActive">  @Html.Raw(strCheck)</a>
-                                </th>
-                                <th>
-                                    <a href="/admin/news/edit/@item.Id" class="btn btn-primary btn-sm">Sửa</a>
+                                </td>
+                                <td></td>
+                                <td>
+                                    <a href="/admin/Posts/edit/@item.Id" class="btn btn-primary btn-sm">Sửa</a>
                                     <a href="#" data-id="@item.Id" class="btn btn-danger btn-sm btnDelete">Xóa</a>
 
-                                </th>
+                                </td>
                             </tr>
                             i++;
                         }
@@ -114,13 +103,6 @@
                     }
                 </tbody>
             </table>
-            <div class="row">
-                <div class="col-6"></div>
-                <div class="col-6" style="text-align:right">
-                    @Html.PagedListPager(Model, page => Url.Action("Index", new { page }))
-
-                </div>
-            </div>
         </div>
         <!-- /.card-body -->
         <div class="card-footer">
@@ -161,7 +143,7 @@
                 var conf = confirm("Ban co muon xoa ban ghi nay khong");
                 if (conf === true) {
                     $.ajax({
-                        url: '/admin/news/delete',
+                        url: '/admin/Posts/delete',
                         type: 'POST',
                         data: { id: id },
                         success: function (rs) {
@@ -183,7 +165,7 @@
                 var id = btn.data("id");
 
                 $.ajax({
-                    url: '/admin/news/IsActive',
+                    url: '/admin/Posts/IsActive',
                     type: 'POST',
                     data: { id: id },
                     success: function (rs) {
@@ -224,7 +206,7 @@
                     var cof = confirm("ban co muon xoa het khong");
                     if (cof === true) {
                         $.ajax({
-                            url: '/admin/news/deleteAll',
+                            url: '/admin/Posts/deleteAll',
                             type: 'POST',
                             data: { ids: str },
                             success: function (rs) {
