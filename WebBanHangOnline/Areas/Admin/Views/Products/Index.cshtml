@@ -1,9 +1,10 @@
 ﻿
-@model IEnumerable<WebBanHangOnline.Models.EF.Posts>
-
+@model PagedList.PagedList<WebBanHangOnline.Models.EF.Product>
+@using PagedList.Mvc;
+@using PagedList;
 
 @{
-    ViewBag.Title = "Bài viết";
+    ViewBag.Title = "Sản phẩm";
     Layout = "~/Areas/Admin/Views/Shared/_Layout.cshtml";
 }
 @section naviheader{
@@ -15,7 +16,7 @@
             <a href="/admin" class="nav-link">Home</a>
         </li>
         <li class="nav-item d-none d-sm-inline-block">
-            <a href="/admin/Posts" class="nav-link">@ViewBag.Title</a>
+            <a href="/admin/Product" class="nav-link">@ViewBag.Title</a>
         </li>
     </ul>
 }
@@ -49,29 +50,43 @@
             <h3 class="card-title">Danh sách @ViewBag.Title</h3>
 
             <div class="card-tools">
-                <a href="/Admin/Posts/add" class="btn btn-primary">Thêm mới</a>
+                <a href="/Admin/Products/Add" class="btn btn-primary">Thêm mới</a>
                 <a href="#" class="btn btn-danger" id="btnDeleteAll"> Xóa</a>
             </div>
         </div>
         <div class="card-body">
+            @*<div class="row">
+                <div class="col-6">
+                    @using (Html.BeginForm("index", "Product", FormMethod.Get, new { }))
+                    {
+                        <div class="input-group input-group-sm">
+                            @Html.TextBox("Searchtext", new { @class = "form-control" })
+                            <span class="input-group-append">
+                                <button type="submit" class="btn btn-info btn-flat">Tìm Kiếm</button>
+                            </span>
+                        </div>
+                    }
+                </div>
+            </div>*@
             <table class="table table-hover">
                 <thead>
                     <tr class="text-center">
                         <th><input type="checkbox" id="selectALL" /></th>
                         <th>STT</th>
                         <th>Hình ảnh</th>
-                        <th>Tiêu đề</th>
+                        <th>Tên sản phẩm</th>
+                        <th>Danh mục</th>
+                        <th>Số lượng</th>
+                        <th>Giá</th>
                         <th>Ngày tạo</th>
                         <th>Hiển thị</th>
-                        <th>Thứ tự</th>
-
-                        <th></th>
+                        <th style="width:150px;"></th>
                     </tr>
                 </thead>
                 <tbody>
                     @if (Model != null && Model.Any())
                     {
-                        var i = 1;
+                        var i = ((ViewBag.Page - 1) * ViewBag.PageSize) + 1;
                         foreach (var item in Model)
                         {
                             var strCheck = item.IsActive ? "<i class='fa fa-check text-success'></i>" : "<i class='fas fa-times text-danger'></i>";
@@ -79,15 +94,17 @@
                             <tr id="trow_@item.Id" class="text-center">
                                 <td><input type="checkbox" class="cbkItem" value="@item.Id" /></td>
                                 <td>@i</td>
-                                <td><img src="@item.Image" width="80" height="80" /></td>
-                                <td>@item.Title</td>
+                                <td><img src="@item.Image" width="80" height="80" /></td>   
+                                <td style="width:300px;text-align:left;">@item.Title</td>
+                                <<td>@item.ProductCategory.Title</td>
+                                <<td>@item.Quantity</td>
+                                <<td>@item.Price</td>
                                 <td>@item.CreateDate.ToString("dd//MM//yyyy")</td>
                                 <td>
                                     <a href='#' data-id="@item.Id" class="btnActive">  @Html.Raw(strCheck)</a>
                                 </td>
-                                <td></td>
                                 <td>
-                                    <a href="/admin/Posts/edit/@item.Id" class="btn btn-primary btn-sm">Sửa</a>
+                                    <a href="/admin/Product/edit/@item.Id" class="btn btn-primary btn-sm">Sửa</a>
                                     <a href="#" data-id="@item.Id" class="btn btn-danger btn-sm btnDelete">Xóa</a>
 
                                 </td>
@@ -103,6 +120,13 @@
                     }
                 </tbody>
             </table>
+            @*<div class="row">
+                <div class="col-6"></div>
+                <div class="col-6" style="text-align:right">
+                    @Html.PagedListPager(Model, page => Url.Action("Index", new { page }))
+
+                </div>
+            </div>*@
         </div>
         <!-- /.card-body -->
         <div class="card-footer">
@@ -143,7 +167,7 @@
                 var conf = confirm("Ban co muon xoa ban ghi nay khong");
                 if (conf === true) {
                     $.ajax({
-                        url: '/admin/Posts/delete',
+                        url: '/admin/Product/delete',
                         type: 'POST',
                         data: { id: id },
                         success: function (rs) {
@@ -165,7 +189,7 @@
                 var id = btn.data("id");
 
                 $.ajax({
-                    url: '/admin/Posts/IsActive',
+                    url: '/admin/Product/IsActive',
                     type: 'POST',
                     data: { id: id },
                     success: function (rs) {
@@ -206,7 +230,7 @@
                     var cof = confirm("ban co muon xoa het khong");
                     if (cof === true) {
                         $.ajax({
-                            url: '/admin/Posts/deleteAll',
+                            url: '/admin/Product/deleteAll',
                             type: 'POST',
                             data: { ids: str },
                             success: function (rs) {

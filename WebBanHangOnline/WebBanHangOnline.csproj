@@ -183,6 +183,7 @@
     <Compile Include="Areas\Admin\Controllers\HomeController.cs" />
     <Compile Include="Areas\Admin\Controllers\NewsController.cs" />
     <Compile Include="Areas\Admin\Controllers\PostsController.cs" />
+    <Compile Include="Areas\Admin\Controllers\ProductCategoryController.cs" />
     <Compile Include="Areas\Admin\Controllers\ProductsController.cs" />
     <Compile Include="Controllers\AccountController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
@@ -221,6 +222,18 @@
     <Compile Include="Migrations\202407291410492_update.cs" />
     <Compile Include="Migrations\202407291410492_update.Designer.cs">
       <DependentUpon>202407291410492_update.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\202407301938251_database.cs" />
+    <Compile Include="Migrations\202407301938251_database.Designer.cs">
+      <DependentUpon>202407301938251_database.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\202407302057194_database1.cs" />
+    <Compile Include="Migrations\202407302057194_database1.Designer.cs">
+      <DependentUpon>202407302057194_database1.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\202407302136221_database2.cs" />
+    <Compile Include="Migrations\202407302136221_database2.Designer.cs">
+      <DependentUpon>202407302136221_database2.cs</DependentUpon>
     </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Models\AccountViewModels.cs" />
@@ -3242,6 +3255,10 @@
     <Content Include="Areas\Admin\Views\Posts\Index.cshtml" />
     <Content Include="Areas\Admin\Views\Posts\Add.cshtml" />
     <Content Include="Areas\Admin\Views\Posts\Edit.cshtml" />
+    <Content Include="Areas\Admin\Views\Products\Index.cshtml" />
+    <Content Include="Areas\Admin\Views\Products\Add.cshtml" />
+    <Content Include="Areas\Admin\Views\ProductCategory\Index.cshtml" />
+    <Content Include="Areas\Admin\Views\ProductCategory\Add.cshtml" />
     <None Include="Scripts\jquery-3.7.0.intellisense.js" />
     <Content Include="Scripts\jquery-3.7.0.js" />
     <Content Include="Scripts\jquery-3.7.0.min.js" />
@@ -3291,7 +3308,6 @@
   <ItemGroup>
     <Folder Include="App_Data\" />
     <Folder Include="Areas\Admin\Data\" />
-    <Folder Include="Areas\Admin\Views\Products\" />
     <Folder Include="Content\ckfinder\userfiles\" />
     <Folder Include="Views\Category\" />
   </ItemGroup>
@@ -3346,6 +3362,15 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Migrations\202407291410492_update.resx">
       <DependentUpon>202407291410492_update.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\202407301938251_database.resx">
+      <DependentUpon>202407301938251_database.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\202407302057194_database1.resx">
+      <DependentUpon>202407302057194_database1.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\202407302136221_database2.resx">
+      <DependentUpon>202407302136221_database2.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <PropertyGroup>
