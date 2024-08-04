@@ -16,11 +16,12 @@
             <a href="/admin" class="nav-link">Home</a>
         </li>
         <li class="nav-item d-none d-sm-inline-block">
-            <a href="/admin/Product" class="nav-link">@ViewBag.Title</a>
+            <a href="/admin/Products" class="nav-link">@ViewBag.Title</a>
         </li>
     </ul>
 }
-
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<link rel="stylesheet" href="https://code.jquery.com/ui/1.13.3/themes/base/jquery-ui.css">
 
 <!-- Content Wrapper. Contains page content -->
 @*<div class="content-wrapper">*@
@@ -55,19 +56,6 @@
             </div>
         </div>
         <div class="card-body">
-            @*<div class="row">
-                <div class="col-6">
-                    @using (Html.BeginForm("index", "Product", FormMethod.Get, new { }))
-                    {
-                        <div class="input-group input-group-sm">
-                            @Html.TextBox("Searchtext", new { @class = "form-control" })
-                            <span class="input-group-append">
-                                <button type="submit" class="btn btn-info btn-flat">Tìm Kiếm</button>
-                            </span>
-                        </div>
-                    }
-                </div>
-            </div>*@
             <table class="table table-hover">
                 <thead>
                     <tr class="text-center">
@@ -94,17 +82,22 @@
                             <tr id="trow_@item.Id" class="text-center">
                                 <td><input type="checkbox" class="cbkItem" value="@item.Id" /></td>
                                 <td>@i</td>
-                                <td><img src="@item.Image" width="80" height="80" /></td>   
-                                <td style="width:300px;text-align:left;">@item.Title</td>
-                                <<td>@item.ProductCategory.Title</td>
-                                <<td>@item.Quantity</td>
-                                <<td>@item.Price</td>
+                                @*<td><img src="@item.ProductImages.FirstOrDefault(x=>x.IsDefault).Image" width="80" height="80" /></td>*@
+                                @**@
+                                <td><img class="imgProduct" data-id="@item.Id" src="@item.Image" width="80" height="80" /></td>
+                                <td style="width:150px;text-align:left;">@item.Title</td>
+                                <
+                                <td>@item.ProductCategory.Title</td>
+                                <
+                                <td>@item.Quantity</td>
+                                <
+                                <td>@item.Price</td>
                                 <td>@item.CreateDate.ToString("dd//MM//yyyy")</td>
                                 <td>
                                     <a href='#' data-id="@item.Id" class="btnActive">  @Html.Raw(strCheck)</a>
                                 </td>
                                 <td>
-                                    <a href="/admin/Product/edit/@item.Id" class="btn btn-primary btn-sm">Sửa</a>
+                                    <a href="/admin/Products/Edit/@item.Id" class="btn btn-primary btn-sm">Sửa</a>
                                     <a href="#" data-id="@item.Id" class="btn btn-danger btn-sm btnDelete">Xóa</a>
 
                                 </td>
@@ -120,13 +113,13 @@
                     }
                 </tbody>
             </table>
-            @*<div class="row">
+            <div class="row">
                 <div class="col-6"></div>
                 <div class="col-6" style="text-align:right">
                     @Html.PagedListPager(Model, page => Url.Action("Index", new { page }))
 
                 </div>
-            </div>*@
+            </div>
         </div>
         <!-- /.card-body -->
         <div class="card-footer">
@@ -139,14 +132,48 @@
 <!-- /.content -->
 @*</div>*@
 <!-- /.content-wrapper -->
+<div id="dialog">
+    <iframe id="myIframe" style="border:0; width:100%;height:100%;"></iframe>
+</div>
+
+<style>
+    #dialog {
+        overflow: hidden; /* Thêm thuộc tính cuộn */
+    }
+</style>
 
 @section scripts{
+    <link rel="stylesheet" href="https://code.jquery.com/ui/1.13.3/themes/base/jquery-ui.css">
+    <script src="https://code.jquery.com/ui/1.13.3/jquery-ui.min.js"></script>
     <script>
-
         $(document).ready(function () {
 
+            // Hiển thị form load hình ảnh
+            $('#dialog').dialog({
+                autoOpen: false,
+                show: "fade",
+                hide: "fade",
+                modal: true,
+                height: '500',
+                width: '600',
+                resizable: true,
+                title: "Quản lý sản phẩm",
+                close: function () {
+                    window.location.reload();
+                }
+            });
+
+            $('body').on("click", ".imgProduct", function () {
+                debugger;
+                var proid = $(this).attr("data-id");
+                $('#dialog #myIframe').attr("src", "/admin/ProductImage/Index?id=" + proid);
+                $('#dialog').dialog('open');
+                return false;
+            });
+        });
 
 
+        $(document).ready(function () {
             $('body').on('change', '#selectALL', function () {
                 var checkStatus = this.checked;
                 var checkbox = $(this).parents('.card-body').find('tr td input:checkbox');
@@ -158,7 +185,7 @@
                         checkbox.attr('selected', '');
                     }
                 })
-            })
+            });
 
 
 
@@ -167,7 +194,7 @@
                 var conf = confirm("Ban co muon xoa ban ghi nay khong");
                 if (conf === true) {
                     $.ajax({
-                        url: '/admin/Product/delete',
+                        url: '/admin/Products/delete',
                         type: 'POST',
                         data: { id: id },
                         success: function (rs) {
@@ -179,7 +206,7 @@
 
                 }
 
-            })
+            });
         })
         $(document).ready(function () {
             // Đoạn mã cho sự kiện click trên .btnActive
@@ -189,7 +216,7 @@
                 var id = btn.data("id");
 
                 $.ajax({
-                    url: '/admin/Product/IsActive',
+                    url: '/admin/Products/IsActive',
                     type: 'POST',
                     data: { id: id },
                     success: function (rs) {
@@ -213,7 +240,7 @@
                 var i = 0;
                 checkbox.each(function () {
                     if (this.checked) {
-                        $(this).attr('selected', 'checked'); // Sử dụng $(this) thay vì checkbox
+                        $(this).attr('selected', 'checked'); // Sử dụng $(this) thay vì checkbox                                                
                         var _id = $(this).val();
                         if (i === 0) {
                             str += _id;
@@ -230,7 +257,7 @@
                     var cof = confirm("ban co muon xoa het khong");
                     if (cof === true) {
                         $.ajax({
-                            url: '/admin/Product/deleteAll',
+                            url: '/admin/Products/deleteAll',
                             type: 'POST',
                             data: { ids: str },
                             success: function (rs) {

@@ -52,7 +52,7 @@
 
             <div class="card-tools">
                 <a href="/Admin/ProductCategory/add" class="btn btn-primary">Thêm mới</a>
-                <a href="#" class="btn btn-danger" id="btnDeleteAll"> Xóa</a>
+                <a href="#" class="btn btn-danger" id="btnDeleteAll"> Xóa Hết</a>
             </div>
         </div>
         <div class="card-body">
@@ -217,7 +217,7 @@
                     var cof = confirm("ban co muon xoa het khong");
                     if (cof === true) {
                         $.ajax({
-                            url: '/admin/ProductCategory/deleteAll',
+                            url: '/admin/ProductCategory/DeleteAll',
                             type: 'POST',
                             data: { ids: str },
                             success: function (rs) {
