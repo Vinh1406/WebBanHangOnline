@@ -25,7 +25,7 @@ namespace WebBanHangOnline.Areas.Admin.Controllers
             IEnumerable<News> items = db.News.OrderByDescending(x => x.Id);
             if (!string.IsNullOrEmpty(Searchtext))
             {
-                items=items.Where(x=>x.Alias.Contains(Searchtext)||x.Title.Contains(Searchtext));
+                items=items.Where(x=>x.Alias.Contains(Searchtext)||x.Title.Contains(Searchtext)||x.Id.Equals(Searchtext));
             }
             items= items.ToPagedList(pageIndex,pagesize);
             ViewBag.PageSize=pagesize;
@@ -44,7 +44,7 @@ namespace WebBanHangOnline.Areas.Admin.Controllers
             if (ModelState.IsValid)
             {
                 model.CreateDate = DateTime.Now;
-                model.CategoryID = 20;
+                model.CategoryID = 24;
                 model.ModifiedrDate = DateTime.Now;
                 model.Alias = WebBanHangOnline.Models.Commons.Filter.FilterChar(model.Title);
                 db.News.Add(model);

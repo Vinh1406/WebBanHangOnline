@@ -31,8 +31,8 @@ namespace WebBanHangOnline.Areas.Admin.Controllers
             if (ModelState.IsValid)
             {
                 model.CreateDate = DateTime.Now;
-                model.CategoryID = 20;
                 model.ModifiedrDate = DateTime.Now;
+                model.CategoryID = 24;
                 model.Alias = WebBanHangOnline.Models.Commons.Filter.FilterChar(model.Title);
                 db.Posts.Add(model);
                 db.SaveChanges();

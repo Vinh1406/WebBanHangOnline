@@ -1,6 +1,6 @@
 ﻿@model WebBanHangOnline.Models.EF.ProductCategory
 @{
-    ViewBag.Title = "Danh Muc Sản Phẩm Danh Muc Sản Phẩm";
+    ViewBag.Title = "Danh Muc Sản Phẩm";
     Layout = "~/Areas/Admin/Views/Shared/_Layout.cshtml";
 }
 
@@ -16,7 +16,7 @@
             <a href="/admin/ProductCategory" class="nav-link">Tin tức</a>
         </li>
         <li class="nav-item d-none d-sm-inline-block">
-            <a href="/admin/ProductCategory" class="nav-link">Danh Mu   c Sản Phẩm</a>
+            <a href="/admin/ProductCategory" class="nav-link">Danh Muc Sản Phẩm</a>
         </li>
     </ul>
 }
@@ -28,7 +28,7 @@
             </div>
             <div class="col-sm-6">
                 <ol class="breadcrumb float-sm-right">
-                    <li class="breadcrumb-item"><a href="#">Tin tức</a></li>
+                    <li class="breadcrumb-item"><a href="#">Sản Phẩm</a></li>
                     <li class="breadcrumb-item active">Danh Muc Sản Phẩm</li>
                 </ol>
             </div>
@@ -49,6 +49,7 @@
                 {
                     @Html.AntiForgeryToken();
                     @Html.ValidationSummary(true)
+                    @*@Html.HiddenFor(x=>x.Id)*@
                     <!-- your steps content here -->
                     <div id="logins-part" class="content" role="tabpanel" aria-labelledby="logins-part-trigger">
                         <div class="form-group">
@@ -56,7 +57,22 @@
                             @Html.TextBoxFor(x => x.Title, new { @class = "form-control", @placeholder = "Tiêu đề" })
                             @Html.ValidationMessageFor(x => x.Title, null, new { @class = "text-danger" })
                         </div>
-                       
+                        <div class="form-group">
+                            <label for="exampleInputEmail1">Alias</label>
+                            @Html.TextBoxFor(x => x.Alias, new { @class = "form-control", @placeholder = "Alias" })
+                            @Html.ValidationMessageFor(x => x.Alias, null, new { @class = "text-danger" })
+                        </div>
+                        <div class="form-group">
+                            <label for="exampleInputEmail1">Ảnh đại diện</label>
+                            <div class="input-group">
+                                <div class="custom-file">
+                                    @Html.TextBoxFor(x => x.Image, new { @class = "form-control", @id = "txtImage" })
+                                </div>
+                                <div class="input-group-append">
+                                    <input type="button" value="Tải ảnh" onclick="BrowseServer('txtImage')" />
+                                </div>
+                            </div>
+                        </div>
                         <div class="form-group">
                             <label for="exampleInputPassword1">Seo Title</label>
                             @Html.TextAreaFor(x => x.SeoTitle, new { @class = "form-control" })

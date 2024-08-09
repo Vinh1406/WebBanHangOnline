@@ -21,11 +21,12 @@ namespace WebBanHangOnline.Models.EF
         [Required]
         [StringLength(150)]
         public string Title { get; set; }
+        [Required]
         [StringLength(150)]
         public string Alias { get; set; }
         public string Description { get; set; }
         [StringLength(250)]
-        public string Icon { get; set; }
+        public string Image { get; set; }
         [StringLength(250)]
         public string SeoTitle { get; set; }
         [StringLength(500)]

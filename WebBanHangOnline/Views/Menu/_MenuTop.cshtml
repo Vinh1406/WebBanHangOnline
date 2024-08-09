@@ -1,0 +1,19 @@
+﻿@model IEnumerable<WebBanHangOnline.Models.EF.Category>
+
+
+
+@*@{
+        ViewBag.Title = "_MenuTop";
+        Layout = "~/Areas/Admin/Views/Shared/_Layout.cshtml";
+    }*@
+
+@if (Model.Any() && Model != null)
+{
+    <ul class="navbar_menu">
+        @foreach (var item in Model)
+        {
+        <li><a href="/@item.Alias">@item.Title</a></li>
+        }
+    </ul>
+}
+
