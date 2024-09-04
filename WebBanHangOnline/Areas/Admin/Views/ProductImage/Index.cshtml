@@ -39,7 +39,26 @@
         max-width: 1200px;
         margin: auto;
     }
+    /*.btnDefault {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        min-width: 40px;*/ /* Đảm bảo kích thước tối thiểu của nút */
+        /*min-height: 40px;
+    }*/
+    /*.vn_icon a {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        width: 50px;*/ /* Đảm bảo nút có kích thước đủ lớn */
+        /*height: 50px;
+        border-radius: 8px;*/ /* Bo tròn góc cho nút */
+    /*}*/
 
+    .btn-sm i {
+        font-size: 24px; /* Điều chỉnh kích thước biểu tượng */
+        line-height: 1;
+    }
     img {
         width: 100%;
         height: auto;
@@ -69,20 +88,28 @@
                 {
                     foreach (var item in Model)
                     {
-                        <li id="trow_@item.Id">
+                        <li  class="product-image-item" data-id="@item.ProductId" id="trow_@item.Id">
                             <img src="@item.Image" width="100%" />
                             <div class="vn_icon">
-                                <a href="#" class="btn-sm btn btn-danger btnDelete" data-id="@item.Id"><i class="fa fa-trash"></i></a>
+                                <a href="#" class=" btnDelete" data-id="@item.Id">
+                                    <i class="fa fa-trash btn-sm btn btn-danger"></i>
+                                </a>
                                 @if (item.IsDefault)
                                 {
-                                    <a href="#" data-id="@item.Id" class="btn-sm btn btn-success btnDefault"><i class="fa fa-check"></i></a>
+                                    <a href="#" data-id="@item.Id" data-product-id="@item.ProductId" class=" btnDefault">
+                                        <i class="fa fa-check btn-sm btn btn-success" ></i>
+                                    </a>
                                 }
                                 else
                                 {
-                                    <a href="#" data-id="@item.Id" class="btn-sm btn btn-warning btnDefault"><i class="fa-solid fa-circle-xmark"></i></a>
+                                    <a href="#" data-id="@item.Id" class=" btnDefault">
+                                        <i class="fa fa-circle-xmark btn-sm btn btn-warning" ></i>
+                                    </a>
                                 }
                             </div>
                         </li>
+
+
                     }
                 }
             </ul>
@@ -160,8 +187,109 @@
                     });
                 }
             });
-        })
+        });
+        //$(document).ready(function () {
+        //    $('body').on('click', '.btnDefault', function (e) {
+        //        e.preventDefault();
+        //        var conf = confirm("Bạn có muốn cập nhật chế độ ảnh không?");
+        //        var btn = $(this);
+        //        var id = btn.data("id");
 
+        //        if (conf === true) {
+        //            $.ajax({
+        //                url: '/admin/productImage/isDefault',
+        //                type: 'POST',
+        //                data: { id: id },
+        //                success: function (rs) {
+        //                    if (rs.success) {
+        //                        // Xóa tích xanh của tất cả các nút khác
+        //                        $('.btnDefault').html("<i class='fa fa-circle-xmark btn-sm btn btn-warning'></i>");
+
+        //                        // Cập nhật tích xanh cho nút đã chọn
+        //                        if (rs.isDefault) {
+        //                            btn.html("<i class='fa fa-check btn-sm btn btn-success'></i>");
+        //                        } else {
+        //                            btn.html("<i class='fa fa-circle-xmark btn-sm btn btn-warning'></i>");
+        //                        }
+        //                    }
+        //                }
+        //            });
+        //        }
+        //    });
+        //});
+
+        //$('body').on('click', '.btn-select-avatar', function () {
+        //    var $this = $(this);
+        //    var productId = $this.closest('.product-image-item').attr('data-id');
+        //    var imageUrl = $this.closest('.product-image-item').find('img').attr('src');
+        //    debugger;
+        //    if (confirm("Bạn có muốn cập nhật ảnh đại diện?")) {
+        //        // Gửi yêu cầu về server để cập nhật
+        //        $.ajax({
+        //            url: '/Admin/ProductImage/UpdateAvatar',
+        //            type: 'POST',
+        //            data: {
+        //                productId: productId,
+        //                imageUrl: imageUrl
+        //            },
+        //            //success: function (response) {
+        //            //    if (response.success) {
+        //            //        // Gửi message về trang cha để cập nhật ảnh
+        //            //        window.parent.postMessage({
+        //            //            action: 'update-avatar',
+        //            //            productId: productId,
+        //            //            imageUrl: imageUrl
+        //            //        }, "*");
+        //            //    } else {
+        //            //        alert(response.message);
+        //            //    }
+        //            //}
+        //        });
+        //    }
+        //});
+
+
+        @*$(document).ready(function(){
+            $('.btnDefault').click(function(){
+        var imageId = $(this).data('id');
+        var productId = $(this).data('product-id');
+
+        // Gửi yêu cầu Ajax để đặt ảnh làm avatar
+        $.post('@Url.Action("SetAvatar", "Product")', { id: imageId, productId: productId }, function(data){
+            if(data.success){
+                // Xóa trạng thái avatar của tất cả các hình ảnh khác
+                $('.btnDefault').each(function(){
+                    $(this).find('i').removeClass('btn-success').addClass('btn-warning');
+                });
+
+                // Đặt trạng thái avatar cho hình ảnh đã chọn
+                $(this).find('i').removeClass('btn-warning').addClass('btn-success');
+            }
+        }.bind(this));
+    });
+});*@
+
+
+        //$(document).ready(function () {
+        //    $(.btnDefault).click(function () {
+        //        var btn = $(this);
+        //        var imageId = btn.data('id');
+        //        var productId = btn.data('product-id');
+        //        $.ajax({
+        //            url: '/admin/productImage/SetAvartar';
+        //            type: 'POST',
+        //            data: { id: imageId, productId: productId },
+        //            success: function (rs) {
+        //                if (rs.success) {
+        //                    $(.btnDefault).each(function () {
+        //                        btn.find('i').removeClass('')
+        //                    })
+        //                }
+        //            }
+        //        })
+
+        //    })
+        //})
 
     </script>
 }

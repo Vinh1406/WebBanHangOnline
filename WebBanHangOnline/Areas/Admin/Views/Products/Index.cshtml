@@ -67,6 +67,8 @@
                         <th>Số lượng</th>
                         <th>Giá</th>
                         <th>Ngày tạo</th>
+                        <th>Home</th>
+                        <th>Sale</th>
                         <th>Hiển thị</th>
                         <th style="width:150px;"></th>
                     </tr>
@@ -78,6 +80,8 @@
                         foreach (var item in Model)
                         {
                             var strCheck = item.IsActive ? "<i class='fa fa-check text-success'></i>" : "<i class='fas fa-times text-danger'></i>";
+                            var strCheckHome = item.IsHome ? "<i class='fa fa-check text-success'></i>" : "<i class='fas fa-times text-danger'></i>";
+                            var strCheckSale = item.IsHome ? "<i class='fa fa-check text-success'></i>" : "<i class='fas fa-times text-danger'></i>";
 
                             <tr id="trow_@item.Id" class="text-center">
                                 <td><input type="checkbox" class="cbkItem" value="@item.Id" /></td>
@@ -86,13 +90,20 @@
                                 @**@
                                 <td><img class="imgProduct" data-id="@item.Id" src="@item.Image" width="80" height="80" /></td>
                                 <td style="width:150px;text-align:left;">@item.Title</td>
-                                
+
                                 <td>@item.ProductCategory.Title</td>
-                                
+
                                 <td>@item.Quantity</td>
-                                
-                                <td>@item.Price</td>
+
+                                <td>@WebBanHangOnline.Models.Commons.Common.FormatNumber(item.Price)</td>
                                 <td>@item.CreateDate.ToString("dd//MM//yyyy")</td>
+
+                                <td>
+                                    <a href='#' data-id="@item.Id" class="btnHome">  @Html.Raw(strCheckHome)</a>
+                                </td>
+                                <td>
+                                    <a href='#' data-id="@item.Id" class="btnSale">  @Html.Raw(strCheckSale)</a>
+                                </td>
                                 <td>
                                     <a href='#' data-id="@item.Id" class="btnActive">  @Html.Raw(strCheck)</a>
                                 </td>
@@ -104,9 +115,9 @@
                             </tr>
                             i++;
                         }
-                    }
+                                }
                     else
-                    {
+                                {
                         <tr>
                             <td colspan="6">Không có bản ghi nào</td>
                         </tr>
@@ -170,6 +181,13 @@
                 $('#dialog').dialog('open');
                 return false;
             });
+            //window.addEventListener('message', function (event) {
+            //    if (event.data && event.data.action === 'update-avatar') {
+            //        var imgElement = $('.imgProduct[data-id="' + event.data.productId + '"]');
+            //        imgElement.attr('src', event.data.imageUrl);
+            //    }
+            //});
+
         });
 
 
@@ -230,6 +248,50 @@
                     }
                 });
             });
+
+           
+            $('body').on('click', '.btnHome', function (e) {
+                e.preventDefault(); // Đảm bảo gọi đúng e.preventDefault()
+                var btn = $(this);
+                var id = btn.data("id");
+
+                $.ajax({
+                    url: '/admin/Products/IsHome',
+                    type: 'POST',
+                    data: { id: id },
+                    success: function (rs) {
+                        if (rs.success) {
+                            if (rs.isHome) {
+                                btn.html("<i class='fa fa-check text-success'></i>");
+                            } else {
+                                btn.html("<i class='fas fa-times text-danger'></i>");
+                            }
+                        }
+                    }
+                });
+            });
+
+            $('body').on('click', '.btnSale', function (e) {
+                e.preventDefault(); // Đảm bảo gọi đúng e.preventDefault()
+                var btn = $(this);
+                var id = btn.data("id");
+
+                $.ajax({
+                    url: '/admin/Products/IsSale',
+                    type: 'POST',
+                    data: { id: id },
+                    success: function (rs) {
+                        if (rs.success) {
+                            if (rs.isSale) {
+                                btn.html("<i class='fa fa-check text-success'></i>");
+                            } else {
+                                btn.html("<i class='fas fa-times text-danger'></i>");
+                            }
+                        }
+                    }
+                });
+            });
+
 
             // Đoạn mã cho sự kiện click trên #btnDeleteAll
             $('body').on('click', '#btnDeleteAll', function (e) {

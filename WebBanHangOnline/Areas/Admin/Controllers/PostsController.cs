@@ -51,6 +51,7 @@ namespace WebBanHangOnline.Areas.Admin.Controllers
         [ValidateAntiForgeryToken]
         public ActionResult Edit(Posts model)
         {
+            
             if (ModelState.IsValid)
             {
                 db.Posts.Attach(model);
@@ -58,9 +59,11 @@ namespace WebBanHangOnline.Areas.Admin.Controllers
                 model.Alias = WebBanHangOnline.Models.Commons.Filter.FilterChar(model.Title);
                 db.Entry(model).State = System.Data.Entity.EntityState.Modified;
                 db.SaveChanges();
+
                 return RedirectToAction("Index");
             }
             return View(model);
+          
         }
         [HttpPost]
         public ActionResult Delete(int id)

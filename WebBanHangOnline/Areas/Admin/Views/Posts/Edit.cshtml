@@ -59,13 +59,13 @@
                                 @Html.ValidationMessageFor(x => x.Title, null, new { @class = "text-danger" })
                             </div>
                             <div class="form-group">
-                                <label class="exampleInputFile">Ảnh đại diên</label>
+                                <label for="exampleInputFile">Ảnh đại diên</label>
                                 <div class="input-group">
                                     <div class="custom-file">
                                         @Html.TextBoxFor(x => x.Image, new { @id = "txtImage", @class = "form-control" })
                                     </div>
                                     <div class="input-group-append">
-                                        <input type="button" value="Tải ảnh" onclick="BrowseServer('txtImage');" />
+                                        <input type="button" value="Tải ảnh" onclick="BrowseServer('txtImage');"></input>
                                     </div>
                                 </div>
                             </div>
@@ -108,25 +108,23 @@
 
 
 @section scripts{
-
     <script>
         $(document).ready(function () {
             CKEDITOR.replace('txtDetail', {
-                customConfig: 'content/ckeditor/config.js',
+                customConfig: '/content/ckeditor/config.js',
                 extraAllowedContent: 'span',
             });
         });
-        function BrowseServer(filed) {
+        function BrowseServer(field) {
             var finder = new CKFinder();
-            filed.selectActionFunction = function (fileUrl) {
-                document.getElementById(filed).value = fileUrl;
+            finder.selectActionFunction = function (fileUrl) {
+                document.getElementById(field).value = fileUrl;
             };
             finder.popup();
         }
+
     </script>
 }
-
-
 
 
 

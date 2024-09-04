@@ -91,7 +91,7 @@ namespace WebBanHangOnline.Areas.Admin.Controllers
 
 
 
-
+       
         public ActionResult Edit(int id)
         {
             // Nạp sản phẩm bao gồm cả hình ảnh sản phẩm
@@ -105,7 +105,7 @@ namespace WebBanHangOnline.Areas.Admin.Controllers
             return View(item);
         }
 
-
+        
 
         [HttpPost]
         [ValidateAntiForgeryToken]
@@ -119,11 +119,14 @@ namespace WebBanHangOnline.Areas.Admin.Controllers
                 {
                     return HttpNotFound();
                 }
-                product.ModifiedrDate = DateTime.Now;
+                product.ProductCategoryID = model.ProductCategoryID;
+                product.Title = model.Title;
+                product.Description = model.Description;
+                product.Price = model.Price;
+                product.Detail = model.Detail;
+                product.Quantity = model.Quantity;
                 product.Alias = WebBanHangOnline.Models.Commons.Filter.FilterChar(model.Title);
-                //db.Entry(model).State=System.Data.Entity.EntityState.Modified;
-
-
+                product.ModifiedrDate = DateTime.Now;
                 // Lưu thay đổi
                 db.Entry(product).State = EntityState.Modified;
                 db.SaveChanges();
@@ -184,6 +187,49 @@ namespace WebBanHangOnline.Areas.Admin.Controllers
             return Json(new { success = false });
 
         }
+
+
+        [HttpPost]
+        public ActionResult IsHome(int id)
+        {
+            var item = db.Products.Find(id);
+            if (item != null)
+            {
+                item.IsHome = !item.IsHome;
+                db.SaveChanges();
+                return Json(new { success = true, isHome = item.IsHome });
+            }
+            return Json(new { success = false });
+
+        }
+        [HttpPost]
+        public ActionResult IsSale(int id)
+        {
+            var item = db.Products.Find(id);
+            if (item != null)
+            {
+                item.IsSale = !item.IsSale;
+                db.SaveChanges();
+                return Json(new { success = true, isSale = item.IsSale });
+            }
+            return Json(new { success = false });
+
+        }
+        //[HttpPost]
+        //public ActionResult UpdateAvatar(int productId, string imageUrl)
+        //{
+        //    // Giả sử bạn có một lớp Product để làm việc với sản phẩm
+        //    var product = db.Products.Find(productId); // Lấy sản phẩm từ database
+        //    if (product != null)
+        //    {
+        //        product.Image = imageUrl; // Cập nhật URL ảnh đại diện
+        //        db.SaveChanges(); // Lưu thay đổi vào database
+        //        return Json(new { success = true });
+        //    }
+
+        //    return Json(new { success = false, message = "Không tìm thấy sản phẩm." });
+        //}
+
 
     }
 }
